@@ -1,0 +1,61 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  schemas   = ["public", "auth"]
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  name     String   @unique
+  password String
+
+  // Relations
+  folders Folder[] @relation("UserFolders")
+  files   File[]   @relation("UserFiles")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("auth")
+}
+
+model Folder {
+  id             String  @id @default(cuid()) 
+  name           String  
+  parentFolderId String? // Nullable for root-level folders
+  userId         String  // Foreign key to the User model
+
+  // Relations
+  files        File[]   @relation("FolderFiles")
+  subFolders   Folder[] @relation("FolderHierarchy")
+  parentFolder Folder?  @relation("FolderHierarchy", fields: [parentFolderId], references: [id])
+  owner        User     @relation("UserFolders", fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("public")
+}
+
+model File {
+  id             String @id @default(cuid())
+  fileName       String
+  content        String
+  parentFolderId String
+  userId         String // Foreign key to the User model
+
+  // Relations
+  parentFolder Folder @relation("FolderFiles", fields: [parentFolderId], references: [id])
+  owner        User   @relation("UserFiles", fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@schema("public")
+}
