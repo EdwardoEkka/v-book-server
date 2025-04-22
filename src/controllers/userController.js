@@ -23,7 +23,7 @@ const SignUpController = async (req, res) => {
 
     // Create new user
     const newUser = await prisma.user.create({
-      data: { name, email, hashedPassword },
+      data: { name, email, password: hashedPassword },
     });
 
     const userName = newUser.name.toLocaleLowerCase();
