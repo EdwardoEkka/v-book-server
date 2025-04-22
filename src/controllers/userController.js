@@ -1,6 +1,7 @@
 const prisma = require("../prismClient");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const argon2 = require("argon2"); 
 
 const SignUpController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -18,12 +19,11 @@ const SignUpController = async (req, res) => {
         .json({ success: false, message: "Email already exists" });
     }
 
-    // Hash password
-    //   const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await argon2.hash(password);
 
     // Create new user
     const newUser = await prisma.user.create({
-      data: { name, email, password },
+      data: { name, email, hashedPassword },
     });
 
     const userName = newUser.name.toLocaleLowerCase();
@@ -67,7 +67,7 @@ const SignInController = async (req, res) => {
     }
 
     // Compare passwords
-    const isMatch = await (password === user.password);
+    const isMatch = await argon2.verify(user.password, password);
     if (!isMatch) {
       return res
         .status(401)
