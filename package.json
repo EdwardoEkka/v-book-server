@@ -1,4 +1,13 @@
 {
+  "name": "file-nest",
+  "version": "1.0.0",
+  "description": "Node.js app with Prisma for GCP Cloud Run",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "generate": "prisma generate",
+    "dev": "nodemon src/index.js"
+  },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "argon2": "^0.41.1",
@@ -11,5 +20,14 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^5.22.0"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [],
+  "author": "Vishal Ekka",
+  "license": "MIT"
 }
