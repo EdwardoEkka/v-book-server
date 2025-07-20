@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8080
 
 # Start the app (change if needed)
-CMD ["node", "src/server.js"]
+CMD ["node", "src/index.js"]
