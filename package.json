@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/index.js",
     "generate": "prisma generate",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
